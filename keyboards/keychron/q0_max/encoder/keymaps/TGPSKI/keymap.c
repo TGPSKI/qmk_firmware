@@ -37,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         MO(FN),    KC_P0,          KC_PDOT         ),
 
     [L1] = LAYOUT_tenkey_27(
-        _______, TO(BASE), _______, TO(L2), TO(FN),
+        QK_BOOTLOADER, TO(BASE), _______, TO(L2), TO(FN),
         _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,
         _______, _______, _______, _______,
@@ -45,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,          _______          ),
 
     [L2] = LAYOUT_tenkey_27(
-        _______, TO(BASE), TO(L1), _______, TO(FN),
+        KC_MUTE, TO(BASE), TO(L1), _______, TO(FN),
         _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______,
         _______, _______, _______, _______,
@@ -73,38 +73,83 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 #endif // ENCODER_MAP_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // printf("Layer state in process_record_user(): %d\n", get_highest_layer(layer_state));
     if (!process_record_keychron_common(keycode, record)) {
         return false;
     }
     return true;
 }
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
+// Layer state set user CB is called properly and returns correct layer state, but 
+// 
+
+// layer_state_t layer_state_set_user(layer_state_t state) {
+//     printf("In layer_state_set_user(). Layer: %d\n", state);
+//     printf("In layer_state_set_user(). Layer: getHighest %d\n", get_highest_layer(state));
+//     switch (get_highest_layer(state)) {
+//         case BASE:
+//             printf("Matched base, layer_state_set_user\n");
+//             rgb_matrix_set_color(BASE_LED_INDEX,  255, 255, 255);  // circle
+//             rgb_matrix_set_color(L1_LED_INDEX, 0, 0, 0);  // triangle
+//             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
+//             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
+//             break;
+//             break;
+//         case L1:
+//             printf("Matched L1, layer_state_set_user\n");
+//             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
+//             rgb_matrix_set_color(L1_LED_INDEX, 255, 255, 255);  // triangle
+//             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
+//             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
+//             break;
+//         case L2:
+//             printf("Matched L2, layer_state_set_user\n");
+//             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
+//             rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
+//             rgb_matrix_set_color(L2_LED_INDEX, 255, 255, 255);  // square
+//             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross0
+//             break;
+//         case FN:
+//             printf("Matched FN, layer_state_set_user\n");
+//             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
+//             rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
+//             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
+//             rgb_matrix_set_color(FN_LED_INDEX, 255, 255, 255);  // cross 
+//             break;
+//     }
+//     return state;
+// }
+
+ bool rgb_matrix_indicators_user(void) {
+    switch (get_highest_layer(layer_state)) {
         case BASE:
-            rgb_matrix_set_color(BASE_LED_INDEX, RGB_RED);  // circle
-            rgb_matrix_set_color(L1_LED_INDEX, RGB_OFF);  // triangle
-            rgb_matrix_set_color(L2_LED_INDEX, RGB_OFF);  // square
-            rgb_matrix_set_color(FN_LED_INDEX, RGB_OFF);  // cross
+            // printf("Matched base, rgb_matrix_indicators_user\n");
+            // rgb_matrix_set_color(BASE_LED_INDEX,  255, 255, 255);  // circle
+            rgb_matrix_set_color(L1_LED_INDEX, 0, 0, 0);  // triangle
+            rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
+            rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
             break;
         case L1:
-            rgb_matrix_set_color(BASE_LED_INDEX, RGB_OFF);  // circle
-            rgb_matrix_set_color(L1_LED_INDEX, RGB_RED);  // triangle
-            rgb_matrix_set_color(L2_LED_INDEX, RGB_OFF);  // square
-            rgb_matrix_set_color(FN_LED_INDEX, RGB_OFF);  // cross
+            // printf("Matched L1, rgb_matrix_indicators_user\n");
+            rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
+            // rgb_matrix_set_color(L1_LED_INDEX, 255, 255, 255);  // triangle
+            rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
+            rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
             break;
         case L2:
-            rgb_matrix_set_color(BASE_LED_INDEX, RGB_OFF);  // circle
-            rgb_matrix_set_color(L1_LED_INDEX, RGB_OFF);  // triangle
-            rgb_matrix_set_color(L2_LED_INDEX, RGB_RED);  // square
-            rgb_matrix_set_color(FN_LED_INDEX, RGB_OFF);  // cross0
+            // printf("Matched L2, rgb_matrix_indicators_user\n");
+            rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
+            rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
+            // rgb_matrix_set_color(L2_LED_INDEX, 255, 255, 255);  // square
+            rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross0
             break;
         case FN:
-            rgb_matrix_set_color(BASE_LED_INDEX, RGB_OFF);  // circle
-            rgb_matrix_set_color(L1_LED_INDEX, RGB_OFF);  // triangle
-            rgb_matrix_set_color(L2_LED_INDEX, RGB_OFF);  // square
-            rgb_matrix_set_color(FN_LED_INDEX, RGB_RED);  // cross 
+            // printf("Matched FN, rgb_matrix_indicators_user\n");
+            rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
+            rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
+            rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
+            // rgb_matrix_set_color(FN_LED_INDEX, 255, 255, 255);  // cross 
             break;
     }
-    return state;
-}
+    return true;
+ }
