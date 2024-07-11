@@ -42,10 +42,10 @@
 #        define LED_DRIVER_SHUTDOWN_PIN A2
 
 #        define BT_HOST_LED_MATRIX_LIST \
-            { 0, 1, 2 }
+            { 4, 9, 14 }
 
 #        define P2P4G_HOST_LED_MATRIX_LIST \
-            { 3 }
+            { 18 }
 
 /* Backlit disable timeout when keyboard is disconnected(unit: second) */
 #        define DISCONNECTED_BACKLIGHT_DISABLE_TIMEOUT 40
