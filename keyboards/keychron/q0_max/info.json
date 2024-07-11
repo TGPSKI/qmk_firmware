@@ -10,15 +10,16 @@
     },
     "features": {
         "bootmagic": true,
-        "extrakey" : true,
-        "mousekey" : true,
+        "extrakey" : false,
+        "mousekey" : false,
         "dip_switch" : false,
         "encoder": true,
         "encoder_map": true,
-        "nkro" : true,
+        "nkro" : false,
         "rgb_matrix": true,
         "raw" : true,
-        "sendstring" : true
+        "sendstring" : true,
+        "console": true
     },
     "matrix_pins": {
         "cols": ["B15", "C6", "C7", "C8", "C9"],
