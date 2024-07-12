@@ -18,8 +18,8 @@
 #include "keychron_common.h"
 #include "TGPSKI.h"
 
-// bool task_switcher_fw_active = false;
-// uint16_t task_switcher_fw_timer = 0;
+bool task_switcher_fw_active = false;
+uint16_t task_switcher_fw_timer = 0;
 
 enum layers {
     BASE,
@@ -140,36 +140,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 return false;
             }
-        // case TASK_SWITCHER_FW:
-        //     if (record->event.pressed) {
-        //         if (!task_switcher_fw_active) {
-        //             task_switcher_fw_active = true;
-        //             SEND_STRING(SS_LALT(SS_LSFT(SS_DOWN)))
-        //             register_code(KC_LALT);
-        //             register_code(KC_LSFT);
-        //             SEND_STRING(SS_DELAY(100));
-        //         }
-        //         task_switcher_fw_timer = timer_read();
-        //         register_code(KC_F4);
-        //     } else {
-        //         unregister_code(KC_F4);
-        //     }
-        //     break;
-        // }
+        case TASK_SWITCHER_FW:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_F4))));
+                return false;
+            }
+
+        }
     return true;
 }
-
-// void matrix_scan_user(void) {
-//     if (task_switcher_fw_active) {
-//         if (timer_elapsed(task_switcher_fw_timer > 1000)) {
-//             unregister_code(KC_LSFT);
-//             unregister_code(KC_LALT);
-//             task_switcher_fw_active = false;
-//         }
-//     }
-// }
-
-
 
  bool rgb_matrix_indicators_user(void) {
     switch (get_highest_layer(layer_state)) {
