@@ -25,12 +25,19 @@ enum layers {
     FN,
 };
 
+enum custom_keycodes {
+    MV_D_1 = SAFE_RANGE,
+    MV_D_2,
+    MV_D_3,
+    MV_D_4,
+};
+
 // clang-format off
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_tenkey_27(
         KC_MUTE, _______, TO(L1), TO(L2), TO(FN),
-        MC_1,	 KC_NUM, KC_PSLS,KC_PAST,KC_PMNS,
+        KC_LALT,	 MV_D_1, MV_D_2,MV_D_3,MV_D_4,
         MC_2,	 KC_P7,	 KC_P8,	 KC_P9,	 KC_PPLS,
         MC_3,	 KC_P4,	 KC_P5,	 KC_P6,
         MC_4,	 KC_P1,	 KC_P2,	 KC_P3,	 KC_PENT,
@@ -38,7 +45,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [L1] = LAYOUT_tenkey_27(
         QK_BOOTLOADER, TO(BASE), _______, TO(L2), TO(FN),
-        _______, _______, _______, _______, _______,
+        KC_LALT, MV_D_1, MV_D_2,MV_D_3,MV_D_4,
         _______, _______, _______, _______, _______,
         _______, _______, _______, _______,
         _______, _______, _______, _______, _______,
@@ -46,7 +53,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [L2] = LAYOUT_tenkey_27(
         KC_MUTE, TO(BASE), TO(L1), _______, TO(FN),
-        _______, _______, _______, _______, _______,
+        KC_LALT, MV_D_1, MV_D_2,MV_D_3,MV_D_4,
         _______, _______, _______, _______, _______,
         _______, _______, _______, _______,
         _______, _______, _______, _______, _______,
@@ -73,52 +80,53 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 #endif // ENCODER_MAP_ENABLE
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    const uint8_t mods = get_mods();
+    const uint8_t oneshot_mods = get_oneshot_mods();
+    printf("Mods: %d, Oneshot mods: %d\n", mods, oneshot_mods);
+    printf("Keycode: %d\n", keycode);
     // printf("Layer state in process_record_user(): %d\n", get_highest_layer(layer_state));
     if (!process_record_keychron_common(keycode, record)) {
         return false;
     }
+    // fixme mods
+    switch (keycode) {
+        case MV_D_1:
+            if (record->event.pressed) {
+                if (( mods | oneshot_mods) & MOD_MASK_SHIFT) {
+                    printf("desktop 1 with mods\n");
+                    del_oneshot_mods(MOD_MASK_SHIFT);
+                    unregister_mods(MOD_MASK_SHIFT);
+                    SEND_STRING(SS_LALT(SS_LCMD(SS_LSFT(SS_TAP(X_F1)))));
+                    register_mods(MOD_MASK_SHIFT);
+                } else {
+                    printf("desktop 1\n");
+                    SEND_STRING(SS_LALT(SS_TAP(X_F1)));
+                }
+            break;
+        case MV_D_2:
+            if (record->event.pressed) {
+                printf("desktop 2\n");
+                SEND_STRING(SS_LALT(SS_TAP(X_F2)));
+            }
+            break;
+        case MV_D_3:
+            if (record->event.pressed) {
+                printf("desktop 3\n");
+                SEND_STRING(SS_LALT(SS_TAP(X_F3)));
+            }
+            break;
+        case MV_D_4:
+            if (record->event.pressed) {
+                printf("desktop 4\n");
+                SEND_STRING(SS_LALT(SS_TAP(X_F4)));
+            }
+            break;
+        }
+    }
     return true;
-}
+};
 
-// Layer state set user CB is called properly and returns correct layer state, but 
-// 
 
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//     printf("In layer_state_set_user(). Layer: %d\n", state);
-//     printf("In layer_state_set_user(). Layer: getHighest %d\n", get_highest_layer(state));
-//     switch (get_highest_layer(state)) {
-//         case BASE:
-//             printf("Matched base, layer_state_set_user\n");
-//             rgb_matrix_set_color(BASE_LED_INDEX,  255, 255, 255);  // circle
-//             rgb_matrix_set_color(L1_LED_INDEX, 0, 0, 0);  // triangle
-//             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
-//             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
-//             break;
-//             break;
-//         case L1:
-//             printf("Matched L1, layer_state_set_user\n");
-//             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
-//             rgb_matrix_set_color(L1_LED_INDEX, 255, 255, 255);  // triangle
-//             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
-//             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
-//             break;
-//         case L2:
-//             printf("Matched L2, layer_state_set_user\n");
-//             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
-//             rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
-//             rgb_matrix_set_color(L2_LED_INDEX, 255, 255, 255);  // square
-//             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross0
-//             break;
-//         case FN:
-//             printf("Matched FN, layer_state_set_user\n");
-//             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
-//             rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
-//             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
-//             rgb_matrix_set_color(FN_LED_INDEX, 255, 255, 255);  // cross 
-//             break;
-//     }
-//     return state;
-// }
 
  bool rgb_matrix_indicators_user(void) {
     switch (get_highest_layer(layer_state)) {
