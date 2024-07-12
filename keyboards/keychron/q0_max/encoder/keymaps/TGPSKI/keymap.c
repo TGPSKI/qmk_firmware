@@ -82,49 +82,63 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     const uint8_t mods = get_mods();
     const uint8_t oneshot_mods = get_oneshot_mods();
-    printf("Mods: %d, Oneshot mods: %d\n", mods, oneshot_mods);
-    printf("Keycode: %d\n", keycode);
+    // printf("Mods: %d, Oneshot mods: %d\n", mods, oneshot_mods);
     // printf("Layer state in process_record_user(): %d\n", get_highest_layer(layer_state));
     if (!process_record_keychron_common(keycode, record)) {
         return false;
     }
-    // fixme mods
     switch (keycode) {
         case MV_D_1:
             if (record->event.pressed) {
-                if (( mods | oneshot_mods) & MOD_MASK_SHIFT) {
-                    printf("desktop 1 with mods\n");
-                    del_oneshot_mods(MOD_MASK_SHIFT);
-                    unregister_mods(MOD_MASK_SHIFT);
-                    SEND_STRING(SS_LALT(SS_LCMD(SS_LSFT(SS_TAP(X_F1)))));
-                    register_mods(MOD_MASK_SHIFT);
+                if (( mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LSFT(SS_TAP(X_F1)))));
+                    register_mods(mods);
                 } else {
-                    printf("desktop 1\n");
                     SEND_STRING(SS_LALT(SS_TAP(X_F1)));
                 }
-            break;
+            return false;
+        }
         case MV_D_2:
             if (record->event.pressed) {
-                printf("desktop 2\n");
-                SEND_STRING(SS_LALT(SS_TAP(X_F2)));
+                if (( mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LSFT(SS_TAP(X_F2)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_TAP(X_F2)));
+                }
+                return false;
             }
-            break;
         case MV_D_3:
             if (record->event.pressed) {
-                printf("desktop 3\n");
-                SEND_STRING(SS_LALT(SS_TAP(X_F3)));
+                if (( mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LSFT(SS_TAP(X_F3)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_TAP(X_F3)));
+                }
+                return false;
             }
-            break;
         case MV_D_4:
             if (record->event.pressed) {
-                printf("desktop 4\n");
-                SEND_STRING(SS_LALT(SS_TAP(X_F4)));
+                if (( mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LSFT(SS_TAP(X_F4)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_TAP(X_F4)));
+                }
+                return false;
             }
-            break;
         }
-    }
     return true;
-};
+}
 
 
 
