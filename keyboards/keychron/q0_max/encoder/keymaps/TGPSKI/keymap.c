@@ -31,6 +31,11 @@ enum custom_keycodes {
     MV_D_3,
     MV_D_4,
     TASK_SWITCHER_FW,
+    UW_3x1_1U_LEFT,
+    UW_3x1_1U_CENTER,
+    UW_3x1_1U_RIGHT,
+    UW_3x1_2U_LEFT,
+    UW_3x1_2U_RIGHT,
 };
 
 // clang-format off
@@ -39,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_tenkey_27(
         KC_MUTE, _______, TO(L1), TO(L2), TO(FN),
         KC_LALT,	 MV_D_1, MV_D_2,MV_D_3,MV_D_4,
-        MC_2,	 KC_P7,	 KC_P8,	 KC_P9,	 TASK_SWITCHER_FW,
+        KC_LALT,	 UW_3x1_1U_LEFT,	 UW_3x1_1U_CENTER,	 UW_3x1_1U_RIGHT,	 TASK_SWITCHER_FW,
         MC_3,	 KC_P4,	 KC_P5,	 KC_P6,
         MC_4,	 KC_P1,	 KC_P2,	 KC_P3,	 KC_PENT,
         MO(FN),    KC_P0,          KC_PDOT         ),
@@ -100,7 +105,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     SEND_STRING(SS_LALT(SS_TAP(X_F1)));
                 }
             return false;
-        }
+            }
         case MV_D_2:
             if (record->event.pressed) {
                 if (( mods | oneshot_mods) & MOD_MASK_ALT) {
@@ -138,16 +143,50 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
         case TASK_SWITCHER_FW:
-            if (record->event.pressed) {
+            if (record->event.pressed) {                
                 SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_F4))));
                 return false;
             }
-
-        }
+        case UW_3x1_1U_LEFT:
+            if (record->event.pressed) {
+                if (( mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_SEMICOLON)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_COMMA)))));
+                }                
+                return false;
+            }
+        case UW_3x1_1U_CENTER:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_DOT)))));
+                return false;
+            }
+        case UW_3x1_1U_RIGHT: 
+            if (record->event.pressed) {
+                if (( mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_QUOTE)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_SLASH)))));
+                }
+                return false;
+            } 
+    }
     return true;
 }
 
- bool rgb_matrix_indicators_user(void) {
+    // UW_3x1_1U_LEFT,
+    // UW_3x1_1U_CENTER,
+    // UW_3x1_1U_RIGHT,
+    // UW_3x1_2U_LEFT,
+    // UW_3x1_2U_RIGHT,
+
+bool rgb_matrix_indicators_user(void) {
     switch (get_highest_layer(layer_state)) {
         case BASE:
             // printf("Matched base, rgb_matrix_indicators_user\n");
@@ -177,6 +216,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
             // rgb_matrix_set_color(FN_LED_INDEX, 255, 255, 255);  // cross 
             break;
-    }
-    return true;
- }
+   }
+   return true;
+}
