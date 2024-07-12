@@ -18,6 +18,9 @@
 #include "keychron_common.h"
 #include "TGPSKI.h"
 
+// bool task_switcher_fw_active = false;
+// uint16_t task_switcher_fw_timer = 0;
+
 enum layers {
     BASE,
     L1,
@@ -30,6 +33,7 @@ enum custom_keycodes {
     MV_D_2,
     MV_D_3,
     MV_D_4,
+    TASK_SWITCHER_FW,
 };
 
 // clang-format off
@@ -38,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_tenkey_27(
         KC_MUTE, _______, TO(L1), TO(L2), TO(FN),
         KC_LALT,	 MV_D_1, MV_D_2,MV_D_3,MV_D_4,
-        MC_2,	 KC_P7,	 KC_P8,	 KC_P9,	 KC_PPLS,
+        MC_2,	 KC_P7,	 KC_P8,	 KC_P9,	 TASK_SWITCHER_FW,
         MC_3,	 KC_P4,	 KC_P5,	 KC_P6,
         MC_4,	 KC_P1,	 KC_P2,	 KC_P3,	 KC_PENT,
         MO(FN),    KC_P0,          KC_PDOT         ),
@@ -136,9 +140,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 return false;
             }
-        }
+        // case TASK_SWITCHER_FW:
+        //     if (record->event.pressed) {
+        //         if (!task_switcher_fw_active) {
+        //             task_switcher_fw_active = true;
+        //             SEND_STRING(SS_LALT(SS_LSFT(SS_DOWN)))
+        //             register_code(KC_LALT);
+        //             register_code(KC_LSFT);
+        //             SEND_STRING(SS_DELAY(100));
+        //         }
+        //         task_switcher_fw_timer = timer_read();
+        //         register_code(KC_F4);
+        //     } else {
+        //         unregister_code(KC_F4);
+        //     }
+        //     break;
+        // }
     return true;
 }
+
+// void matrix_scan_user(void) {
+//     if (task_switcher_fw_active) {
+//         if (timer_elapsed(task_switcher_fw_timer > 1000)) {
+//             unregister_code(KC_LSFT);
+//             unregister_code(KC_LALT);
+//             task_switcher_fw_active = false;
+//         }
+//     }
+// }
 
 
 
