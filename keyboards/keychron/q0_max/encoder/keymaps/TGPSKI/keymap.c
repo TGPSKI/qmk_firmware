@@ -18,9 +18,6 @@
 #include "keychron_common.h"
 #include "TGPSKI.h"
 
-bool task_switcher_fw_active = false;
-uint16_t task_switcher_fw_timer = 0;
-
 enum layers {
     BASE,
     L1,
