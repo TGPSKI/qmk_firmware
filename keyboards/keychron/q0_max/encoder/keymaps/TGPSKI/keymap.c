@@ -53,49 +53,54 @@ enum custom_keycodes {
     ACTIVE_MAXIMIZE_TOGGLE,
     ACTIVE_MINIMIZE_TOGGLE,
     ACTIVE_CURRENT_DESKTOP,
+    WINDOW_ZOOM_IN,
+    WINDOW_ZOOM_OUT,
+    WINDOW_ZOOM_RESET,
+    DESKTOP_ZOOM_IN,
+    DESKTOP_ZOOM_OUT,
+    DESKTOP_ZOOM_RESET,
 };
 
 // clang-format off
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_tenkey_27(
-        KC_MUTE,     _______,                TO(L1),                 TO(L2),                 TO(FN),
-        KC_LALT,	 MV_D_1,                 MV_D_2,                 MV_D_3,                 MV_D_4,
-        KC_LALT,	 UW_3x1_1U_LEFT,	     UW_3x1_1U_CENTER,	     UW_3x1_1U_RIGHT,	     ACTIVE_CURRENT_DESKTOP,
-        KC_LALT,	 UW_3x2_1U_UP_LEFT,	     UW_3x2_1U_UP_CENTER,	 UW_3x2_1U_UP_RIGHT,
-        KC_LALT,	 UW_3x2_1U_DOWN_LEFT,	 UW_3x2_1U_DOWN_CENTER,	 UW_3x2_1U_DOWN_RIGHT,	 TASK_SWITCHER_FW,
-        KC_LALT,     ACTIVE_MAXIMIZE_TOGGLE,                             ACTIVE_MINIMIZE_TOGGLE                           ),
+        WINDOW_ZOOM_RESET,     _______,                TO(L1),                   TO(L2),                 TO(FN),
+        KC_LALT,	           MV_D_1,                 MV_D_2,                   MV_D_3,                 MV_D_4,
+        KC_LALT,	           UW_3x1_1U_LEFT,	       UW_3x1_1U_CENTER,	     UW_3x1_1U_RIGHT,	     ACTIVE_CURRENT_DESKTOP,
+        KC_LALT,	           UW_3x2_1U_UP_LEFT,	   UW_3x2_1U_UP_CENTER,	     UW_3x2_1U_UP_RIGHT,
+        KC_LALT,	           UW_3x2_1U_DOWN_LEFT,	   UW_3x2_1U_DOWN_CENTER,	 UW_3x2_1U_DOWN_RIGHT,	 TASK_SWITCHER_FW,
+        KC_LALT,               ACTIVE_MAXIMIZE_TOGGLE,                               ACTIVE_MINIMIZE_TOGGLE                           ),
 
     [L1] = LAYOUT_tenkey_27(
-        QK_BOOTLOADER, TO(BASE), _______, TO(L2), TO(FN),
-        KC_LALT, MV_D_1, MV_D_2,MV_D_3,MV_D_4,
-        _______, _______, _______, _______, _______,
-        _______, _______, _______, _______,
-        _______, _______, _______, _______, _______,
-        _______, _______,          _______          ),
+        QK_BOOTLOADER,         TO(BASE),               _______,                   TO(L2),                 TO(FN),
+        KC_LALT,               MV_D_1,                 MV_D_2,                    MV_D_3,                 MV_D_4,
+        _______,               _______,                _______,                   _______,                _______,
+        _______,               _______,                _______,                   _______,
+        _______,               _______,                _______,                   _______,                _______,
+        _______,               _______,                                               _______                                         ),
 
     [L2] = LAYOUT_tenkey_27(
-        KC_MUTE, TO(BASE), TO(L1), _______, TO(FN),
-        KC_LALT, MV_D_1, MV_D_2,MV_D_3,MV_D_4,
-        _______, _______, _______, _______, _______,
-        _______, _______, _______, _______,
-        _______, _______, _______, _______, _______,
-        _______, _______,          _______          ),
+        KC_MUTE,               TO(BASE),               TO(L1),                    _______,                TO(FN),
+        KC_LALT,               MV_D_1,                 MV_D_2,                    MV_D_3,                 MV_D_4,
+        _______,               _______,                _______,                   _______,                _______,
+        _______,               _______,                _______,                   _______,
+        _______,               _______,                _______,                   _______,                _______,
+        _______,               _______,                                               _______                                         ),
 
     [FN] = LAYOUT_tenkey_27(
-        RGB_TOG, TO(BASE), TO(L1), TO(L2), _______,
-        BT_HST1, RGB_MOD, RGB_VAI, RGB_HUI, _______,
-        BT_HST2, RGB_RMOD,RGB_VAD, RGB_HUD, _______,
-        BT_HST3, RGB_SAI, RGB_SPI, KC_MPRV,
-        P2P4G,   RGB_SAD, RGB_SPD, KC_MPLY, _______,
-        _______, RGB_TOG,          KC_MNXT          )
-
+        RGB_TOG,               TO(BASE),               TO(L1),                    TO(L2),                 _______,
+        BT_HST1,               RGB_MOD,                RGB_VAI,                   RGB_HUI,                _______,
+        BT_HST2,               RGB_RMOD,               RGB_VAD,                   RGB_HUD,                _______,
+        BT_HST3,               RGB_SAI,                RGB_SPI,                   KC_MPRV,
+        P2P4G,                 RGB_SAD,                RGB_SPD,                   KC_MPLY,                _______,
+        _______,               RGB_TOG,                                               KC_MNXT                                         )
 };
 
 // clang-format on
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-    [BASE] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
+    [BASE] = {ENCODER_CCW_CW(WINDOW_ZOOM_OUT, WINDOW_ZOOM_IN)},
     [L1]   = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
     [L2]   = {ENCODER_CCW_CW(KC_VOLU, KC_VOLD)},
     [FN]   = {ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
@@ -274,7 +279,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 return false;
             }
-            break;
         case TASK_SWITCHER_FW: // enter
             if (record->event.pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_ALT) {
@@ -287,7 +291,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 return false;
             }
-            break;
         case ACTIVE_CURRENT_DESKTOP: // +
             if (record->event.pressed) {
                 if ((mods | oneshot_mods) & MOD_MASK_ALT) {
@@ -297,6 +300,43 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     register_mods(mods);
                 } else {
                     SEND_STRING(SS_TAP(X_F3));
+                }
+                return false;
+            }
+        // ZOOM
+        case WINDOW_ZOOM_IN: 
+            if (record->event.pressed) { // DESKTOP
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_Q)))));
+                    register_mods(mods);
+                } else { // WINDOW
+                    SEND_STRING(SS_LALT(SS_TAP(X_EQUAL)));
+                }
+                return false;
+            }
+        case WINDOW_ZOOM_OUT:
+            if (record->event.pressed) { // DESKTOP
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_W)))));
+                    register_mods(mods);
+                } else { // WINDOW
+                    SEND_STRING(SS_LALT(SS_TAP(X_MINUS)));
+                }
+                return false;
+            }
+        case WINDOW_ZOOM_RESET:
+            if (record->event.pressed) { // DESKTOP
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_LSFT(SS_TAP(X_R))))));
+                    register_mods(mods);
+                } else { // WINDOW
+                    SEND_STRING(SS_LALT(SS_TAP(X_0)));
                 }
                 return false;
             }
