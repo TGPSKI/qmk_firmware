@@ -383,11 +383,19 @@ bool set_layer_indicators(void) {
 }
 
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    // TRANSITIOn M KEYS FROM PURPLE TO RED
+    RGB_MATRIX_INDICATOR_SET_COLOR(M1_LED_INDEX, 221, 0, 204);
+    RGB_MATRIX_INDICATOR_SET_COLOR(M2_LED_INDEX, 230, 0, 153);
+    RGB_MATRIX_INDICATOR_SET_COLOR(M3_LED_INDEX, 239, 0, 102);
+    RGB_MATRIX_INDICATOR_SET_COLOR(M4_LED_INDEX, 248, 0, 51);
+
     // KEEP SKULL GLOWING RED
     RGB_MATRIX_INDICATOR_SET_COLOR(SKULL_LED_INDEX, 255, 0, 0);
 
+    // SET PLAYSTATION KEYs LAYER INDICATOR
     if (led_min <= BASE_LED_INDEX && led_max >= FN_LED_INDEX) {
         return set_layer_indicators();
     }
+
     return false;
 }
