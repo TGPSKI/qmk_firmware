@@ -348,7 +348,8 @@ bool set_layer_indicators(void) {
     switch (get_highest_layer(layer_state)) {
         case BASE:
             // printf("Matched base, rgb_matrix_indicators_user\n");
-            // rgb_matrix_set_color(BASE_LED_INDEX,  255, 255, 255);  // circle
+            // rgb_matrix_set_color(BASE_LED_INDEX,  255, 255, 255); // white  // circle
+            rgb_matrix_set_color(BASE_LED_INDEX,  212, 0, 255); // purp  // circle
             rgb_matrix_set_color(L1_LED_INDEX, 0, 0, 0);  // triangle
             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
@@ -357,6 +358,7 @@ bool set_layer_indicators(void) {
             // printf("Matched L1, rgb_matrix_indicators_user\n");
             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
             // rgb_matrix_set_color(L1_LED_INDEX, 255, 255, 255);  // triangle
+            rgb_matrix_set_color(L1_LED_INDEX,  212, 0, 255);  // triangle
             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross
             break;
@@ -365,6 +367,7 @@ bool set_layer_indicators(void) {
             rgb_matrix_set_color(BASE_LED_INDEX,  0, 0, 0);  // circle
             rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
             // rgb_matrix_set_color(L2_LED_INDEX, 255, 255, 255);  // square
+            rgb_matrix_set_color(L2_LED_INDEX,  212, 0, 255);  // square
             rgb_matrix_set_color(FN_LED_INDEX,  0, 0, 0);  // cross0
             break;
         case FN:
@@ -373,6 +376,7 @@ bool set_layer_indicators(void) {
             rgb_matrix_set_color(L1_LED_INDEX,  0, 0, 0);  // triangle
             rgb_matrix_set_color(L2_LED_INDEX,  0, 0, 0);  // square
             // rgb_matrix_set_color(FN_LED_INDEX, 255, 255, 255);  // cross 
+             rgb_matrix_set_color(FN_LED_INDEX,  212, 0, 255);  // cross 
             break;
    }
    return true;
