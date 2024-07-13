@@ -50,18 +50,20 @@ enum custom_keycodes {
     UW_2x2_2U_RIGHT,
     UW_2x2_2U_UP,
     UW_2x2_2U_DOWN,
+    ACTIVE_MAXIMIZE_TOGGLE,
+    ACTIVE_MINIMIZE_TOGGLE,
 };
 
 // clang-format off
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_tenkey_27(
-        KC_MUTE, _______, TO(L1), TO(L2), TO(FN),
-        KC_LALT,	 MV_D_1, MV_D_2,MV_D_3,MV_D_4,
-        KC_LALT,	 UW_3x1_1U_LEFT,	 UW_3x1_1U_CENTER,	 UW_3x1_1U_RIGHT,	 TASK_SWITCHER_FW,
-        KC_LALT,	 UW_3x2_1U_UP_LEFT,	 UW_3x2_1U_UP_CENTER,	 UW_3x2_1U_UP_RIGHT,
-        KC_LALT,	 UW_3x2_1U_DOWN_LEFT,	 UW_3x2_1U_DOWN_CENTER,	 UW_3x2_1U_DOWN_RIGHT,	 KC_PENT,
-        MO(FN),    KC_P0,          KC_F3         ),
+        KC_MUTE,     _______,                TO(L1),                 TO(L2),                 TO(FN),
+        KC_LALT,	 MV_D_1,                 MV_D_2,                 MV_D_3,                 MV_D_4,
+        KC_LALT,	 UW_3x1_1U_LEFT,	     UW_3x1_1U_CENTER,	     UW_3x1_1U_RIGHT,	     TASK_SWITCHER_FW,
+        KC_LALT,	 UW_3x2_1U_UP_LEFT,	     UW_3x2_1U_UP_CENTER,	 UW_3x2_1U_UP_RIGHT,
+        KC_LALT,	 UW_3x2_1U_DOWN_LEFT,	 UW_3x2_1U_DOWN_CENTER,	 UW_3x2_1U_DOWN_RIGHT,	 KC_F3,
+        KC_LALT,     ACTIVE_MAXIMIZE_TOGGLE,                             ACTIVE_MINIMIZE_TOGGLE           ),
 
     [L1] = LAYOUT_tenkey_27(
         QK_BOOTLOADER, TO(BASE), _______, TO(L2), TO(FN),
@@ -248,8 +250,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_G)))));
                     register_mods(mods);
                 } else {
-                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_B)))));
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_H)))));
                 }
+                return false;
+            }
+        case ACTIVE_MAXIMIZE_TOGGLE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LWIN(SS_TAP(X_W)));
+                return false;
+            }
+        case ACTIVE_MINIMIZE_TOGGLE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LWIN(SS_LCTL(SS_TAP(X_DOWN))));
                 return false;
             }
     }
