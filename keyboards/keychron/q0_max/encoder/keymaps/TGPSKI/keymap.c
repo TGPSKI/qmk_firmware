@@ -59,9 +59,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_MUTE, _______, TO(L1), TO(L2), TO(FN),
         KC_LALT,	 MV_D_1, MV_D_2,MV_D_3,MV_D_4,
         KC_LALT,	 UW_3x1_1U_LEFT,	 UW_3x1_1U_CENTER,	 UW_3x1_1U_RIGHT,	 TASK_SWITCHER_FW,
-        MC_3,	 KC_P4,	 KC_P5,	 KC_P6,
-        MC_4,	 KC_P1,	 KC_P2,	 KC_P3,	 KC_PENT,
-        MO(FN),    KC_P0,          KC_PDOT         ),
+        KC_LALT,	 UW_3x2_1U_UP_LEFT,	 UW_3x2_1U_UP_CENTER,	 UW_3x2_1U_UP_RIGHT,
+        KC_LALT,	 UW_3x2_1U_DOWN_LEFT,	 UW_3x2_1U_DOWN_CENTER,	 UW_3x2_1U_DOWN_RIGHT,	 KC_PENT,
+        MO(FN),    KC_P0,          KC_F3         ),
 
     [L1] = LAYOUT_tenkey_27(
         QK_BOOTLOADER, TO(BASE), _______, TO(L2), TO(FN),
@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [L2] = LAYOUT_tenkey_27(
         KC_MUTE, TO(BASE), TO(L1), _______, TO(FN),
         KC_LALT, MV_D_1, MV_D_2,MV_D_3,MV_D_4,
-        _______, _______, _______, _______, _______,1
+        _______, _______, _______, _______, _______,
         _______, _______, _______, _______,
         _______, _______, _______, _______, _______,
         _______, _______,          _______          ),
@@ -196,7 +196,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         case UW_3x2_1U_UP_LEFT:
             if (record->event.pressed) {
-                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_E)))));
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_R)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_E)))));
+                }
                 return false;
             }
         case UW_3x2_1U_UP_CENTER:
@@ -206,12 +213,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         case UW_3x2_1U_UP_RIGHT:
             if (record->event.pressed) {
-                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_Y)))));
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_T)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_Y)))));
+                }
                 return false;
             }
         case UW_3x2_1U_DOWN_LEFT:
             if (record->event.pressed) {
-                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_D)))));
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_F)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_D)))));
+                }
                 return false;
             }
         case UW_3x2_1U_DOWN_CENTER:
@@ -221,10 +242,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
         case UW_3x2_1U_DOWN_RIGHT:
             if (record->event.pressed) {
-                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_J)))));
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_G)))));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_B)))));
+                }
                 return false;
             }
-        
     }
     return true;
 }
