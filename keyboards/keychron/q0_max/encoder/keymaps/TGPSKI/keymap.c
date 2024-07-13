@@ -52,6 +52,7 @@ enum custom_keycodes {
     UW_2x2_2U_DOWN,
     ACTIVE_MAXIMIZE_TOGGLE,
     ACTIVE_MINIMIZE_TOGGLE,
+    ACTIVE_CURRENT_DESKTOP,
 };
 
 // clang-format off
@@ -60,10 +61,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_tenkey_27(
         KC_MUTE,     _______,                TO(L1),                 TO(L2),                 TO(FN),
         KC_LALT,	 MV_D_1,                 MV_D_2,                 MV_D_3,                 MV_D_4,
-        KC_LALT,	 UW_3x1_1U_LEFT,	     UW_3x1_1U_CENTER,	     UW_3x1_1U_RIGHT,	     TASK_SWITCHER_FW,
+        KC_LALT,	 UW_3x1_1U_LEFT,	     UW_3x1_1U_CENTER,	     UW_3x1_1U_RIGHT,	     ACTIVE_CURRENT_DESKTOP,
         KC_LALT,	 UW_3x2_1U_UP_LEFT,	     UW_3x2_1U_UP_CENTER,	 UW_3x2_1U_UP_RIGHT,
-        KC_LALT,	 UW_3x2_1U_DOWN_LEFT,	 UW_3x2_1U_DOWN_CENTER,	 UW_3x2_1U_DOWN_RIGHT,	 KC_F3,
-        KC_LALT,     ACTIVE_MAXIMIZE_TOGGLE,                             ACTIVE_MINIMIZE_TOGGLE           ),
+        KC_LALT,	 UW_3x2_1U_DOWN_LEFT,	 UW_3x2_1U_DOWN_CENTER,	 UW_3x2_1U_DOWN_RIGHT,	 TASK_SWITCHER_FW,
+        KC_LALT,     ACTIVE_MAXIMIZE_TOGGLE,                             ACTIVE_MINIMIZE_TOGGLE                           ),
 
     [L1] = LAYOUT_tenkey_27(
         QK_BOOTLOADER, TO(BASE), _______, TO(L2), TO(FN),
@@ -159,12 +160,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 return false;
             }
-        // ACTIVE WINDOW SWITHCER
-        case TASK_SWITCHER_FW:
-            if (record->event.pressed) {                
-                SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_F4))));
-                return false;
-            }
         // ULTRAWIDE WINDOWS
         // 3x1 + 3x2
         case UW_3x1_1U_LEFT:
@@ -254,14 +249,55 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 return false;
             }
-        case ACTIVE_MAXIMIZE_TOGGLE:
+        // ACTIVE_WINDOWS_AND_UW_2x1_1x2_1U
+        case ACTIVE_MAXIMIZE_TOGGLE: // 0
             if (record->event.pressed) {
-                SEND_STRING(SS_LWIN(SS_TAP(X_W)));
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LWIN(SS_TAP(X_LEFT)));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LWIN(SS_TAP(X_W)));
+                }
                 return false;
             }
-        case ACTIVE_MINIMIZE_TOGGLE:
+        case ACTIVE_MINIMIZE_TOGGLE: // .
             if (record->event.pressed) {
-                SEND_STRING(SS_LWIN(SS_LCTL(SS_TAP(X_DOWN))));
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LWIN(SS_TAP(X_RIGHT)));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LWIN(SS_LCTL(SS_TAP(X_DOWN))));
+                }
+                return false;
+            }
+            break;
+        case TASK_SWITCHER_FW: // enter
+            if (record->event.pressed) {
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LWIN(SS_TAP(X_DOWN)));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_F4))));
+                }
+                return false;
+            }
+            break;
+        case ACTIVE_CURRENT_DESKTOP: // +
+            if (record->event.pressed) {
+                if ((mods | oneshot_mods) & MOD_MASK_ALT) {
+                    del_oneshot_mods(MOD_MASK_ALT);
+                    unregister_mods(MOD_MASK_ALT);
+                    SEND_STRING(SS_LWIN(SS_TAP(X_UP)));
+                    register_mods(mods);
+                } else {
+                    SEND_STRING(SS_TAP(X_F3));
+                }
                 return false;
             }
     }
