@@ -344,7 +344,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-bool rgb_matrix_indicators_user(void) {
+bool set_layer_indicators(void) {
     switch (get_highest_layer(layer_state)) {
         case BASE:
             // printf("Matched base, rgb_matrix_indicators_user\n");
@@ -376,4 +376,14 @@ bool rgb_matrix_indicators_user(void) {
             break;
    }
    return true;
+}
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    // KEEP SKULL GLOWING RED
+    RGB_MATRIX_INDICATOR_SET_COLOR(SKULL_LED_INDEX, 255, 0, 0);
+
+    if (led_min <= BASE_LED_INDEX && led_max >= FN_LED_INDEX) {
+        return set_layer_indicators();
+    }
+    return false;
 }

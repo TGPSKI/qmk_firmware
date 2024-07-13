@@ -28,3 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define DESK_2_INDEX 6
 // #define DESK_3_INDEX 7
 // #define DESK_4_INDEX 8
+
+/* SKULL LIGHTING */
+#define SKULL_LED_INDEX 23
