@@ -36,6 +36,20 @@ enum custom_keycodes {
     UW_3x1_1U_RIGHT,
     UW_3x1_2U_LEFT,
     UW_3x1_2U_RIGHT,
+    UW_3x2_1U_UP_LEFT,
+    UW_3x2_1U_UP_CENTER,
+    UW_3x2_1U_UP_RIGHT,
+    UW_3x2_1U_DOWN_LEFT,
+    UW_3x2_1U_DOWN_CENTER,
+    UW_3x2_1U_DOWN_RIGHT,
+    UW_2x2_1U_UP_LEFT,
+    UW_2x2_1U_UP_RIGHT,
+    UW_2x2_1U_DOWN_LEFT,
+    UW_2x2_1U_DOWN_RIGHT,
+    UW_2x2_2U_LEFT,
+    UW_2x2_2U_RIGHT,
+    UW_2x2_2U_UP,
+    UW_2x2_2U_DOWN,
 };
 
 // clang-format off
@@ -60,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [L2] = LAYOUT_tenkey_27(
         KC_MUTE, TO(BASE), TO(L1), _______, TO(FN),
         KC_LALT, MV_D_1, MV_D_2,MV_D_3,MV_D_4,
-        _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, _______,1
         _______, _______, _______, _______,
         _______, _______, _______, _______, _______,
         _______, _______,          _______          ),
@@ -94,6 +108,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
     switch (keycode) {
+        // VIRTUAL DESKTOPS
         case MV_D_1:
             if (record->event.pressed) {
                 if (( mods | oneshot_mods) & MOD_MASK_ALT) {
@@ -142,11 +157,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 }
                 return false;
             }
+        // ACTIVE WINDOW SWITHCER
         case TASK_SWITCHER_FW:
             if (record->event.pressed) {                
                 SEND_STRING(SS_LALT(SS_LSFT(SS_TAP(X_F4))));
                 return false;
             }
+        // ULTRAWIDE WINDOWS
+        // 3x1 + 3x2
         case UW_3x1_1U_LEFT:
             if (record->event.pressed) {
                 if (( mods | oneshot_mods) & MOD_MASK_ALT) {
@@ -175,16 +193,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_SLASH)))));
                 }
                 return false;
-            } 
+            }
+        case UW_3x2_1U_UP_LEFT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_E)))));
+                return false;
+            }
+        case UW_3x2_1U_UP_CENTER:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_V)))));
+                return false;
+            }
+        case UW_3x2_1U_UP_RIGHT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_Y)))));
+                return false;
+            }
+        case UW_3x2_1U_DOWN_LEFT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_D)))));
+                return false;
+            }
+        case UW_3x2_1U_DOWN_CENTER:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_B)))));
+                return false;
+            }
+        case UW_3x2_1U_DOWN_RIGHT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT(SS_LWIN(SS_LCTL(SS_TAP(X_J)))));
+                return false;
+            }
+        
     }
     return true;
 }
-
-    // UW_3x1_1U_LEFT,
-    // UW_3x1_1U_CENTER,
-    // UW_3x1_1U_RIGHT,
-    // UW_3x1_2U_LEFT,
-    // UW_3x1_2U_RIGHT,
 
 bool rgb_matrix_indicators_user(void) {
     switch (get_highest_layer(layer_state)) {
