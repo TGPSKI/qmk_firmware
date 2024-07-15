@@ -107,6 +107,21 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 };
 #endif // ENCODER_MAP_ENABLE
 
+// bool mod_helper(keyrecord_t *record, uint8_t mods, uint8_t oneshot_mods, uint8_t MASK, const char *standard, const char *alt) {
+//     if (record->event.pressed) {
+//         if (( mods | oneshot_mods) & MASK) {
+//             del_oneshot_mods(MASK);
+//             unregister_mods(MASK);
+//             SEND_STRING(alt);
+//             register_mods(mods);
+//         } else {
+//             SEND_STRING(standard);
+//         }
+//         return false;
+//     }
+//     return true;
+// }
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     const uint8_t mods = get_mods();
     const uint8_t oneshot_mods = get_oneshot_mods();
@@ -118,6 +133,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         // VIRTUAL DESKTOPS
         case MV_D_1:
+            // return mod_helper(record, mods, oneshot_mods, MOD_MASK_ALT, SS_LALT(SS_TAP(X_F1)), SS_LALT(SS_LWIN(SS_LSFT(SS_TAP(X_F1)))));
             if (record->event.pressed) {
                 if (( mods | oneshot_mods) & MOD_MASK_ALT) {
                     del_oneshot_mods(MOD_MASK_ALT);
