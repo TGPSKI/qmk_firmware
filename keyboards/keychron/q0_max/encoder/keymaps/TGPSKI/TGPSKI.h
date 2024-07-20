@@ -23,11 +23,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define L2_LED_INDEX 2
 #define FN_LED_INDEX 3
 
-// /* Enable active desktop indicators */
-// #define DESK_1_INDEX 5
-// #define DESK_2_INDEX 6
-// #define DESK_3_INDEX 7
-// #define DESK_4_INDEX 8
+/* Enable active desktop indicators */
+#define DESK_1_INDEX 5
+#define DESK_2_INDEX 6
+#define DESK_3_INDEX 7
+#define DESK_4_INDEX 8
 
 /* SKULL LIGHTING */
 
