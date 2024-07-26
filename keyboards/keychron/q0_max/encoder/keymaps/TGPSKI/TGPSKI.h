@@ -30,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DESK_4_INDEX 8
 
 /* SKULL LIGHTING */
-
 #define M1_LED_INDEX 4
 #define M2_LED_INDEX 9
 #define M3_LED_INDEX 14

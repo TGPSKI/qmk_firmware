@@ -71,6 +71,8 @@ typedef struct PACKED {
 
 bool process_record_keychron_common(uint16_t keycode, keyrecord_t *record);
 void keychron_common_task(void);
+// RAW HID WIP
+void read_current_desktop_report_user(uint8_t *data, uint8_t length); 
 
 #ifdef ENCODER_ENABLE
 void encoder_cb_init(void);
