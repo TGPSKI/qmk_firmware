@@ -107,21 +107,6 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 };
 #endif // ENCODER_MAP_ENABLE
 
-// bool mod_helper(keyrecord_t *record, uint8_t mods, uint8_t oneshot_mods, uint8_t MASK, const char *standard, const char *alt) {
-//     if (record->event.pressed) {
-//         if (( mods | oneshot_mods) & MASK) {
-//             del_oneshot_mods(MASK);
-//             unregister_mods(MASK);
-//             SEND_STRING(alt);
-//             register_mods(mods);
-//         } else {
-//             SEND_STRING(standard);
-//         }
-//         return false;
-//     }
-//     return true;
-// }
-
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     const uint8_t mods = get_mods();
     const uint8_t oneshot_mods = get_oneshot_mods();
@@ -398,49 +383,7 @@ bool set_layer_indicators(void) {
    return true;
 }
 
-// RAW HID WIP
-static uint16_t current_desktop = 0;
-static bool desktop_updated = false;
-
-void read_current_desktop_report_user(uint8_t *data, uint8_t length) {
-    printf("Called read_current_desktop_report_user()\n");
-    printf("Data0: %d\nData1: %d\n", data[0], data[1]);
-    if (data[0] == 'D' && length >= 2) {
-        current_desktop = data[1];
-        desktop_updated = true;
-        printf("Current desktop: %d\n", current_desktop);
-    }
-}
-
-// RAW HID WIP
-void handle_desktop_switch(void) {
-    printf("Called handle_desktop_switch()\n");
-    switch (current_desktop) {
-        case 1:
-            printf("Matched desktop 1\n");
-            rgb_matrix_set_color(DESK_1_INDEX, 255, 255, 255);
-            break;
-        case 2:
-            printf("Matched desktop 2\n");
-            rgb_matrix_set_color(DESK_2_INDEX, 255, 255, 255);
-            break;
-        case 3:
-            printf("Matched desktop 3\n");
-            rgb_matrix_set_color(DESK_3_INDEX, 255, 255, 255);
-            break;
-        case 4:
-            printf("Matched desktop 4\n");
-            rgb_matrix_set_color(DESK_4_INDEX, 255, 255, 255);
-            break;
-    }
-}
-
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    // RAW HID WIP
-    if (desktop_updated) {
-        desktop_updated = false;
-        handle_desktop_switch();
-    }
     // TRANSITION M KEYS FROM PURPLE TO RED
     RGB_MATRIX_INDICATOR_SET_COLOR(M1_LED_INDEX, 221, 0, 204);
     RGB_MATRIX_INDICATOR_SET_COLOR(M2_LED_INDEX, 230, 0, 153);
@@ -457,3 +400,64 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
     return false;
 }
+
+
+// bool mod_helper(keyrecord_t *record, uint8_t mods, uint8_t oneshot_mods, uint8_t MASK, const char *standard, const char *alt) {
+//     if (record->event.pressed) {
+//         if (( mods | oneshot_mods) & MASK) {
+//             del_oneshot_mods(MASK);
+//             unregister_mods(MASK);
+//             SEND_STRING(alt);
+//             register_mods(mods);
+//         } else {
+//             SEND_STRING(standard);
+//         }
+//         return false;
+//     }
+//     return true;
+// }
+
+
+// // RAW HID WIP
+// static uint16_t current_desktop = 0;
+// static bool desktop_updated = false;
+
+// void read_current_desktop_report_user(uint8_t *data, uint8_t length) {
+//     printf("Called read_current_desktop_report_user()\n");
+//     printf("Data0: %d\nData1: %d\n", data[0], data[1]);
+//     if (data[0] == 'D' && length >= 2) {
+//         current_desktop = data[1];
+//         desktop_updated = true;
+//         printf("Current desktop: %d\n", current_desktop);
+//     }
+// }
+
+// // RAW HID WIP
+// void handle_desktop_switch(void) {
+//     printf("Called handle_desktop_switch()\n");
+//     switch (current_desktop) {
+//         case 1:
+//             printf("Matched desktop 1\n");
+//             rgb_matrix_set_color(DESK_1_INDEX, 255, 255, 255);
+//             break;
+//         case 2:
+//             printf("Matched desktop 2\n");
+//             rgb_matrix_set_color(DESK_2_INDEX, 255, 255, 255);
+//             break;
+//         case 3:
+//             printf("Matched desktop 3\n");
+//             rgb_matrix_set_color(DESK_3_INDEX, 255, 255, 255);
+//             break;
+//         case 4:
+//             printf("Matched desktop 4\n");
+//             rgb_matrix_set_color(DESK_4_INDEX, 255, 255, 255);
+//             break;
+//     }
+// // }
+
+// bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+//     // RAW HID WIP
+//     if (desktop_updated) {
+//         desktop_updated = false;
+//         handle_desktop_switch();
+//     }

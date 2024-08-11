@@ -1,1 +1,2 @@
-RAW_ENABLE = yes
+RAW_ENABLE = no
+VIA_ENABLE = yes
