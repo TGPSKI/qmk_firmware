@@ -88,11 +88,11 @@
 #    if defined(RGB_MATRIX_ENABLE)
 
 #        define SNLED27351_SDB_PIN B7
-
+/* default { 0, 1, 2 } */
 #        define BT_INDCATION_LED_MATRIX_LIST \
-            { 0, 1, 2 }
-
-#        define P24G_INDICATION_LED_MATRIX_INDEX 3
+            { 4, 9, 14 }
+/* default 3 */
+#        define P24G_INDICATION_LED_MATRIX_INDEX 18
 
 /* Backlit disable timeout when keyboard is disconnected(unit: second) */
 #        define DISCONNECTED_BACKLIGHT_DISABLE_TIMEOUT 40
