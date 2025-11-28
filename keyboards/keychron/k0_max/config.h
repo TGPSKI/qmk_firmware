@@ -60,7 +60,7 @@
 #    define RGB_MATRIX_DRIVER_SHUTDOWN_ENABLE
 
 /* Indications */
-#    define NUM_LOCK_INDEX 5
+// #    define NUM_LOCK_INDEX 5
 #    define LOW_BAT_IND_INDEX \
         { 23 }
 
